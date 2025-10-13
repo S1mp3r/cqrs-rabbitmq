@@ -1,9 +1,15 @@
 package br.rafael.users.api.entities;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -12,9 +18,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -23,6 +31,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "users_procedures")
+@ToString(exclude = {"appointments"})
 public class ProcedureEntity extends BaseEntity {
     
     @NotBlank(message = "Name is required")
@@ -39,5 +48,10 @@ public class ProcedureEntity extends BaseEntity {
     @DecimalMax(value = "999999999999999999.99", message = "Price cannot be higher than 999.999.999.999.999.999,99")
     @Column(nullable = false, precision = 18, scale = 2)
     private BigDecimal price;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "procedure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    private List<AppointmentEntity> appointments;
 
 }
