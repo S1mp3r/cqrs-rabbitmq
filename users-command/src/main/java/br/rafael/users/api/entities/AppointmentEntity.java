@@ -29,11 +29,11 @@ import lombok.ToString;
 public class AppointmentEntity extends BaseEntity {
     
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "customer_id")
+    @JoinColumn(nullable = true, name = "customer_id")
     private CustomerEntity customer;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "user_procedure_id")
+    @JoinColumn(nullable = true, name = "user_procedure_id")
     @EqualsAndHashCode.Exclude
     private ProcedureEntity procedure;
     
