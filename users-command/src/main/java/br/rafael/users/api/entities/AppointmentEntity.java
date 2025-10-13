@@ -28,11 +28,12 @@ import lombok.ToString;
 @ToString(exclude = {"customer", "procedure"})
 public class AppointmentEntity extends BaseEntity {
     
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY)
     @JoinColumn(nullable = true, name = "customer_id")
+    @EqualsAndHashCode.Exclude
     private CustomerEntity customer;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY)
     @JoinColumn(nullable = true, name = "user_procedure_id")
     @EqualsAndHashCode.Exclude
     private ProcedureEntity procedure;
@@ -43,6 +44,5 @@ public class AppointmentEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean appointmentOpen;
-
 
 }
