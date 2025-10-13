@@ -1,0 +1,1 @@
+ALTER TABLE public.customers ADD email VARCHAR(255);

@@ -40,6 +40,11 @@ public class CustomerEntity extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String phone;
 
+    @NotBlank(message = "Email is required")
+    @Size(max = 100, message = "Email must have a maximum of 255 characters")
+    @Column(nullable = false, length = 255)
+    private String email;
+
     @JsonIgnore
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
