@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/customers")
@@ -40,7 +39,7 @@ public class CustomerController {
 
     @PatchMapping
     @ResponseStatus(value = HttpStatus.OK)
-    @Operation(description = "Update the email and/or phone number from a customer")
+    @Operation(description = "Update the email and/or username and/or phone number from a customer")
     public ResponseEntity<CustomerDTO> update(@Valid @RequestBody CustomerDTO dto) {
         return ResponseEntity.ok().body(service.update(dto));
     }

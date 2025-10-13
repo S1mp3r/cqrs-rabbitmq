@@ -2,6 +2,7 @@ package br.rafael.users.api.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.rafael.users.api.entities.CustomerEntity;
 import br.rafael.users.api.exceptions.NotFoundException;
@@ -16,12 +17,14 @@ public class CustomerService {
     private final CustomerRepository repository;
     private final ModelMapper mapper;
 
+    @Transactional
     public CustomerDTO insert(CustomerDTO customerDTO) {
         final CustomerEntity customer = mapper.map(customerDTO, CustomerEntity.class);
         final CustomerEntity newCustomer = repository.save(customer);
         return mapper.map(newCustomer, CustomerDTO.class);
     }
 
+    @Transactional
     public CustomerDTO update(CustomerDTO customerDTO) {
         final CustomerEntity customer = repository.findById(customerDTO.getId()).orElseThrow(
                 () -> new NotFoundException("Customer not found"));
@@ -34,6 +37,7 @@ public class CustomerService {
         return mapper.map(newCustomer, CustomerDTO.class);
     }
 
+    @Transactional
     public void remove(Long id) {
         repository.deleteById(id);
     }

@@ -3,7 +3,7 @@ package br.rafael.users.api.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.rafael.users.api.entities.CustomerEntity;
+import br.rafael.users.api.entities.ProcedureEntity;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {}
+public interface ProcedureRepository extends JpaRepository<ProcedureEntity, Long> {}
