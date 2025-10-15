@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomerService {
     
+    private final BrokerService brokerService;
     private final CustomerRepository repository;
     private final ModelMapper mapper;
 
@@ -21,6 +22,7 @@ public class CustomerService {
     public CustomerDTO insert(CustomerDTO customerDTO) {
         final CustomerEntity customer = mapper.map(customerDTO, CustomerEntity.class);
         final CustomerEntity newCustomer = repository.save(customer);
+        sendToQueue(newCustomer);
         return mapper.map(newCustomer, CustomerDTO.class);
     }
 
@@ -34,11 +36,26 @@ public class CustomerService {
         customer.setPhone(customerDTO.getPhone());
 
         final CustomerEntity newCustomer = repository.save(customer);
+        sendToQueue(newCustomer);
+
         return mapper.map(newCustomer, CustomerDTO.class);
     }
 
     @Transactional
     public void remove(Long id) {
         repository.deleteById(id);
+        // TODO: implement the delete logic
+    }
+
+    private void sendToQueue(CustomerEntity customer) {
+        final CustomerDTO customerDTO = CustomerDTO
+            .builder()
+            .id(customer.getId())
+            .name(customer.getName())
+            .email(customer.getEmail())
+            .phone(customer.getPhone())
+            .build()
+        ;
+        brokerService.send("users", "usersExchange", customerDTO);
     }
 }

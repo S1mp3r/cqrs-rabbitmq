@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProcedureService {
     
+    private final BrokerService brokerService;
     private final ProcedureRepository repository;
     private final ModelMapper mapper;
 
@@ -21,6 +22,7 @@ public class ProcedureService {
     public ProcedureDTO insert(ProcedureDTO procedureDTO) {
         final ProcedureEntity procedure = mapper.map(procedureDTO, ProcedureEntity.class);
         final ProcedureEntity newProcedure = repository.save(procedure);
+        sendToQueue(newProcedure);
         return mapper.map(newProcedure, ProcedureDTO.class);
     }
 
@@ -34,11 +36,25 @@ public class ProcedureService {
         procedure.setPrice(procedureDTO.getPrice());
 
         final ProcedureEntity newProcedure = repository.save(procedure);
+        sendToQueue(newProcedure);
         return mapper.map(newProcedure, ProcedureDTO.class);
     }
 
     @Transactional
     public void remove(Long id) {
         repository.deleteById(id);
+        // TODO: implement the delete logic
+    }
+
+    private void sendToQueue(ProcedureEntity procedure) {
+        final ProcedureDTO procedureDTO = ProcedureDTO
+            .builder()
+            .id(procedure.getId())
+            .name(procedure.getName())
+            .description(procedure.getDescription())
+            .price(procedure.getPrice())
+            .build()
+        ;
+        brokerService.send("procedure", "proceduresExchange", procedureDTO);
     }
 }
