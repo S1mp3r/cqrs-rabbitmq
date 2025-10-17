@@ -1,9 +1,12 @@
 package br.rafael.users.api.services;
 
+import java.util.Arrays;
+
 import org.springframework.stereotype.Service;
 
 import br.rafael.users.api.models.ProcedureDTO;
 import br.rafael.users.api.repositories.ProcedureRepository;
+import br.rafael.users.api.utils.LogUtils;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -12,8 +15,14 @@ public class ProcedureService {
     
     private final ProcedureRepository repository;
 
-    public void insertToReplicate(ProcedureDTO procedure) {
-        repository.save(procedure);
+    public void save(ProcedureDTO procedure) {
+        try {
+            LogUtils.info("Saving procedure: " + procedure.getId());
+            repository.save(procedure);
+        } catch (Exception e) {
+            LogUtils.error("[ERROR] Error saving the procedure: " + e.getMessage());
+            LogUtils.trace("[TRACE] " + Arrays.toString(e.getStackTrace()));
+        }
     }
 
 }

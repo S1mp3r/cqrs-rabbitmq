@@ -16,14 +16,16 @@ public class SyncService {
     private final AppointmentService appointmentService;
 
     public void syncCustomer(CustomerDTO customer) {
-
+        customerService.save(customer);
+        appointmentService.updateAppointmentCustomer(customer);
     }
 
     public void syncProcedure(ProcedureDTO procedure) {
-        
+        procedureService.save(procedure);
+        appointmentService.updateAppointmentProcedure(procedure);
     }
 
     public void syncAppointment(AppointmentMongoDTO appointment) {
-        
+        appointmentService.save(appointment);
     }
 }

@@ -26,39 +26,39 @@ public class ListenerConfigImpl implements ListenerConfig {
     @Override
     @RabbitListener(queues = "usersQueue")
     public void listenToUsersQueue(String message) {
-        LogUtils.info("Message received from queue customersQueue: ", message);
+        LogUtils.info("[INFO] Message received from queue customersQueue: ", message);
         try {
             final CustomerDTO customer = objectMapper.readValue(message, CustomerDTO.class);
             syncService.syncCustomer(customer);
-            LogUtils.info("Message successfully deserialized: ", message);
+            LogUtils.info("[INFO] Customer successfully saved");
         } catch (JsonProcessingException e) {
-            LogUtils.error("An unexpected error has occourred ", e.getMessage());
+            LogUtils.error("[ERROR] An unexpected error has occourred ", e.getMessage());
         }
     }
 
     @Override
     @RabbitListener(queues = "proceduresQueue")
     public void listenToProcedureQueue(String message) {
-        LogUtils.info("Message received from queue proceduresQueue: ", message);
+        LogUtils.info("[INFO] Message received from queue proceduresQueue: ", message);
         try {
             final ProcedureDTO procedure = objectMapper.readValue(message, ProcedureDTO.class);
             syncService.syncProcedure(procedure);
-            LogUtils.info("Message successfully deserialized: ", message);
+            LogUtils.info("[INFO] Procedure successfully saved");
         } catch (JsonProcessingException e) {
-            LogUtils.error("An unexpected error has occourred ", e.getMessage());
+            LogUtils.error("[ERROR] An unexpected error has occourred ", e.getMessage());
         }
     }
 
     @Override
     @RabbitListener(queues = "appointmentsQueue")
     public void listenToAppointmentQueue(String message) {
-        LogUtils.info("Message received from queue appointmentsQueue: ", message);
+        LogUtils.info("[INFO] Message received from queue appointmentsQueue: ", message);
         try {
             final AppointmentMongoDTO appointment = objectMapper.readValue(message, AppointmentMongoDTO.class);
             syncService.syncAppointment(appointment);
-            LogUtils.info("Message successfully deserialized: ", message);
+            LogUtils.info("[INFO] Appointment successfully saved");
         } catch (JsonProcessingException e) {
-            LogUtils.error("An unexpected error has occourred ", e.getMessage());
+            LogUtils.error("[ERROR] An unexpected error has occourred ", e.getMessage());
         }
     }
     
