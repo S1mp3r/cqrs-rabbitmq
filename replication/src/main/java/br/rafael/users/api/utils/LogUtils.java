@@ -11,16 +11,33 @@ public class LogUtils {
         log.info(message);
     }
 
+    public static void info(String message, Object ... args) {
+        log.info(message, args);
+    }
+    
+
     public static void error(String message) {
         log.error(message);
+    }
+
+    public static void error(String message, Object ... args) {
+        log.info(message, args);
     }
 
     public static void warn(String message) {
         log.warn(message);
     }
 
+    public static void warn(String message, Object ... args) {
+        log.info(message, args);
+    }
+
     public static void trace(String message) {
         log.trace(message);
+    }
+
+    public static void trace(String message, Object ... args) {
+        log.info(message, args);
     }
 
 }
