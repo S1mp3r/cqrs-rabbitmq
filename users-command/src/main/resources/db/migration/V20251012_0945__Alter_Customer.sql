@@ -1,1 +1,0 @@
-ALTER TABLE public.customers ALTER email SET NOT NULL;
