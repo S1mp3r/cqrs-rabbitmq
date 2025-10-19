@@ -34,6 +34,17 @@ public class AppointmentService {
         }
     }
 
+    @Transactional
+    public void deleteById(Long id) {
+        try {
+            LogUtils.info("Deleting appointment: " + id);
+            repository.deleteById(id);
+        } catch (Exception e) {
+            LogUtils.error("[ERROR] Error deleting the appointment: " + e.getMessage());
+            LogUtils.trace("[TRACE] " + Arrays.toString(e.getStackTrace()));
+        }
+    }
+
     public void updateAppointmentCustomer(CustomerDTO customer) {
         try {
             LogUtils.info("Updating appointment customer: " + customer.getId());
@@ -56,6 +67,30 @@ public class AppointmentService {
             mongoTemplate.updateMulti(query, update, AppointmentMongoDTO.class);
         } catch (Exception e) {
             LogUtils.error("[ERROR] Error saving the appointment procedure: " + e.getMessage());
+            LogUtils.trace("[TRACE] " + Arrays.toString(e.getStackTrace()));
+        }
+    }
+
+    public void updateAppointmentCustomerDeleted(Long customerId) {
+        try {
+            LogUtils.info("Updating appointment customer deleted: " + customerId);
+            Query query = new Query(Criteria.where("customer.id").is(customerId));
+            Update update = new Update().set("customer", null);
+            mongoTemplate.updateMulti(query, update, AppointmentMongoDTO.class);
+        } catch (Exception e) {
+            LogUtils.error("[ERROR] Error deleting the appointment customer: " + e.getMessage());
+            LogUtils.trace("[TRACE] " + Arrays.toString(e.getStackTrace()));
+        }
+    }
+
+    public void updateAppointmentProcedureDeleted(Long procedureId) {
+        try {
+            LogUtils.info("Updating appointment procedure deleted: " + procedureId);
+            Query query = new Query(Criteria.where("procedure.id").is(procedureId));
+            Update update = new Update().set("procedure", null);
+            mongoTemplate.updateMulti(query, update, AppointmentMongoDTO.class);
+        } catch (Exception e) {
+            LogUtils.error("[ERROR] Error deleting the appointment procedure: " + e.getMessage());
             LogUtils.trace("[TRACE] " + Arrays.toString(e.getStackTrace()));
         }
     }

@@ -43,7 +43,7 @@ public class ProcedureService {
     @Transactional
     public void remove(Long id) {
         repository.deleteById(id);
-        // TODO: implement the delete logic
+        sendToDeletedQueue(id);
     }
 
     private void sendToQueue(ProcedureEntity procedure) {
@@ -56,5 +56,9 @@ public class ProcedureService {
             .build()
         ;
         brokerService.send("procedure", "proceduresExchange", procedureDTO);
+    }
+
+    private void sendToDeletedQueue(Long id) {
+        brokerService.send("procedureDeleted", "proceduresExchange", id);
     }
 }

@@ -25,4 +25,14 @@ public class ProcedureService {
         }
     }
 
+    public void deleteById(Long id) {
+        try {
+            LogUtils.info("Deleting procedure: " + id);
+            repository.deleteById(id);
+        } catch (Exception e) {
+            LogUtils.error("[ERROR] Error deleting the procedure: " + e.getMessage());
+            LogUtils.trace("[TRACE] " + Arrays.toString(e.getStackTrace()));
+        }
+    }
+
 }

@@ -44,7 +44,7 @@ public class CustomerService {
     @Transactional
     public void remove(Long id) {
         repository.deleteById(id);
-        // TODO: implement the delete logic
+        sendToDeletedQueue(id);
     }
 
     private void sendToQueue(CustomerEntity customer) {
@@ -56,6 +56,10 @@ public class CustomerService {
             .phone(customer.getPhone())
             .build()
         ;
-        brokerService.send("users", "usersExchange", customerDTO);
+        brokerService.send("user", "usersExchange", customerDTO);
+    }
+
+    private void sendToDeletedQueue(Long id) {
+        brokerService.send("userDeleted", "usersExchange", id);
     }
 }

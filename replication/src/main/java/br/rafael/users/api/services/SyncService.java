@@ -20,12 +20,26 @@ public class SyncService {
         appointmentService.updateAppointmentCustomer(customer);
     }
 
+    public void syncDeleteCustomer(Long customerId) {
+        customerService.deleteById(customerId);
+        appointmentService.updateAppointmentCustomerDeleted(customerId);
+    }
+
     public void syncProcedure(ProcedureDTO procedure) {
         procedureService.save(procedure);
         appointmentService.updateAppointmentProcedure(procedure);
     }
 
+    public void syncDeleteProcedure(Long procedureId) {
+        procedureService.deleteById(procedureId);
+        appointmentService.updateAppointmentProcedureDeleted(procedureId);
+    }
+
     public void syncAppointment(AppointmentMongoDTO appointment) {
         appointmentService.save(appointment);
+    }
+
+    public void syncDeleteAppointment(Long appointmentId) {
+        appointmentService.deleteById(appointmentId);
     }
 }

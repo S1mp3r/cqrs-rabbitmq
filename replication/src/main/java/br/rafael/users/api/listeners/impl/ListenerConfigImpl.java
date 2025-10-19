@@ -61,5 +61,45 @@ public class ListenerConfigImpl implements ListenerConfig {
             LogUtils.error("[ERROR] An unexpected error has occourred ", e.getMessage());
         }
     }
+
+    @Override
+    @RabbitListener(queues = "deletedUsersQueue")
+    public void listenToUsersQueueDeleted(String message) {
+        LogUtils.info("[INFO] Message received from queue deletedUsersQueue: ", message);
+        try {
+            final Long customerId = objectMapper.readValue(message, Long.class);
+            syncService.syncDeleteCustomer(customerId);
+            LogUtils.info("[INFO] Customer successfully deleted");
+        } catch (JsonProcessingException e) {
+            LogUtils.error("[ERROR] An unexpected error has occourred ", e.getMessage());
+        }
+    }
+
+    @Override
+    @RabbitListener(queues = "deletedProceduresQueue")
+    public void listenToProcedureQueueDeleted(String message) {
+        LogUtils.info("[INFO] Message received from queue deletedProceduresQueue: ", message);
+        try {
+            final Long procedureId = objectMapper.readValue(message, Long.class);
+            syncService.syncDeleteProcedure(procedureId);
+            LogUtils.info("[INFO] Procedure successfully deleted");
+        } catch (JsonProcessingException e) {
+            LogUtils.error("[ERROR] An unexpected error has occourred ", e.getMessage());
+        }
+    }
+
+    @Override
+    @RabbitListener(queues = "deletedAppointmentsQueue")
+    public void listenToAppointmentQueueDeleted(String message) {
+        LogUtils.info("[INFO] Message received from queue deletedAppointmentsQueue: ", message);
+        try {
+            final Long appointmentId = objectMapper.readValue(message, Long.class);
+            syncService.syncDeleteAppointment(appointmentId);
+            LogUtils.info("[INFO] Appointment successfully deleted");
+        } catch (JsonProcessingException e) {
+            LogUtils.error("[ERROR] An unexpected error has occourred ", e.getMessage());
+        }
+    }
+
     
 }

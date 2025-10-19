@@ -72,6 +72,7 @@ public class AppointmentService {
     @Transactional
     public void remove(Long id) {
         repository.deleteById(id);
+        sendToDeletedQueue(id);
     }
 
     private AppointmentDTO buildAppointment(AppointmentEntity appointment) {
@@ -107,6 +108,10 @@ public class AppointmentService {
             .procedure(buildProcedure(appointment))
             .build();
         brokerService.send("appointment", "appointmentsExchange", appointmentDTO);
+    }
+
+    private void sendToDeletedQueue(Long id) {
+        brokerService.send("appointmentDeleted", "appointmentsExchange", id);
     }
 
     private CustomerDTO buildCustomer(AppointmentEntity appointment) {

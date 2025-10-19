@@ -25,4 +25,13 @@ public class CustomerService {
         }
     }
 
+    public void deleteById(Long id) {
+        try {
+            LogUtils.info("Deleting customer: " + id);
+            repository.deleteById(id);
+        } catch (Exception e) {
+            LogUtils.error("[ERROR] Error deleting the customer: " + e.getMessage());
+            LogUtils.trace("[TRACE] " + Arrays.toString(e.getStackTrace()));
+        }
+    }
 }
